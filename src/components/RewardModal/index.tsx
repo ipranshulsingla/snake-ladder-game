@@ -21,7 +21,7 @@ const RewardModal = ({ isOpen, isWinner, onClose, couponURL }: RewardModalProps)
         <button onClick={onClose}>Collect Reward</button>
       </div>
       {isWinner && (
-        <div style={{ position: "absolute", inset: 0 }}>
+        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Lottie isClickToPauseDisabled options={{ animationData: confetti, autoplay: true }} />
         </div>
       )}

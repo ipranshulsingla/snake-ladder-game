@@ -7,10 +7,8 @@ import { Link } from "react-router-dom";
 
 const GamesPage = () => {
   const handleClick = async () => {
-    const ele = document.getElementById("body");
-
     try {
-      await ele?.requestFullscreen();
+      document.documentElement.requestFullscreen();
     } catch {}
   };
 

@@ -17,8 +17,6 @@ import coupon1 from "../../assets/1.png";
 import coupon2 from "../../assets/2.png";
 import logo from "../../assets/logo.png";
 
-const promptMsg = "Leaving this page will result in the loss of your game progress. Are you sure you want to leave?";
-
 const coupons = [
   {
     id: "REWARD_101",
@@ -115,8 +113,9 @@ function GameBoardPage() {
     setModalVisible(false);
   };
 
-  const handleCollectReward = () => {
+  const handleCollectReward = async () => {
     try {
+      await document.exitFullscreen().catch(noop);
       const url = generateGoogleFormLink(realPlayer.name, String(coupon!.id));
       window.location.href = url;
     } catch (error) {
@@ -156,12 +155,7 @@ function GameBoardPage() {
         <Die ref={dieRef} disabled={dieDisabled} onRoll={handleRollDie} />
       </div>
       {modalVisible && <SnakeLadderModal onStartGame={handleStartGame} />}
-      <RewardModal
-        isWinner={game.winner === realPlayer}
-        isOpen={game.gameOver}
-        onClose={handleCollectReward}
-        couponURL={coupon?.coupon || ""}
-      />
+      <RewardModal isWinner={true} isOpen={true} onClose={handleCollectReward} couponURL={coupon?.coupon || ""} />
     </div>
   );
 }
