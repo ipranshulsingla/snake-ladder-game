@@ -5,6 +5,7 @@ const useWindowDimensions = () => {
 
   useEffect(() => {
     const init = () => {
+      console.log("resize");
       setDimensions(window.innerWidth + "_" + window.innerHeight);
     };
 

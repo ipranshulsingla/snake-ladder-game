@@ -28,11 +28,15 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(({ draw, ...props }: C
     };
 
     window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("orientationchange", resizeCanvas);
+    window.addEventListener("deviceorientation", resizeCanvas);
 
     resizeCanvas();
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("orientationchange", resizeCanvas);
+      window.removeEventListener("deviceorientation", resizeCanvas);
     };
   }, []);
 
