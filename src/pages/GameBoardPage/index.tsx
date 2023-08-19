@@ -155,7 +155,12 @@ function GameBoardPage() {
         <Die ref={dieRef} disabled={dieDisabled} onRoll={handleRollDie} />
       </div>
       {modalVisible && <SnakeLadderModal onStartGame={handleStartGame} />}
-      <RewardModal isWinner={true} isOpen={true} onClose={handleCollectReward} couponURL={coupon?.coupon || ""} />
+      <RewardModal
+        isWinner={game.winner === realPlayer}
+        isOpen={game.gameOver}
+        onClose={handleCollectReward}
+        couponURL={coupon?.coupon || ""}
+      />
     </div>
   );
 }
