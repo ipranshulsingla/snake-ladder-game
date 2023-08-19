@@ -1,0 +1,103 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../../assets/wood-texture.jpg);
+  background-size: cover;
+  position: relative;
+}
+
+.canvas {
+  background-image: url("../../assets/board.jpeg");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playersContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-basis: 100%;
+  margin-top: 5px;
+}
+
+.playerContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.playerLeft {
+  flex-direction: row;
+}
+
+.playerRight {
+  flex-direction: row-reverse;
+}
+
+@keyframes leftArrow {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes rightArrow {
+  from {
+    transform: translateX(0px) rotateZ(180deg);
+  }
+  to {
+    transform: translateX(-10px) rotateZ(180deg);
+  }
+}
+
+.playerLeftIcon {
+  animation-name: leftArrow;
+  animation-duration: 0.4s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.playerRightIcon {
+  animation-name: rightArrow;
+  animation-duration: 0.4s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.playerNameTxt {
+  font-size: 2rem;
+  font-weight: 500;
+  text-shadow: 1px 1px 1.5px #000;
+}
+
+.hideBoard {
+  opacity: 0;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  mix-blend-mode: multiply;
+}
+
+@media screen and (max-width: 768px) {
+  .logo {
+    top: 15px;
+    left: unset;
+  }
+}
