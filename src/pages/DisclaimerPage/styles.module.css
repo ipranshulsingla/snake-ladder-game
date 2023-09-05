@@ -1,5 +1,6 @@
 .container {
   padding: 15px;
+  padding-bottom: 50px;
   display: block;
 }
 
@@ -13,4 +14,16 @@
   margin-top: 10px;
   text-align: center;
   text-decoration: underline;
+}
+
+.coachMark {
+  height: 100px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.coachMark > img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
 }
