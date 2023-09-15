@@ -3,20 +3,67 @@ import classNames from "classnames";
 import { forwardRef, useRef, useState } from "react";
 import { useUpdateEffect } from "usehooks-ts";
 import GameBoard from "../classes/GameBoard";
+import Ladder from "../classes/Ladder";
+import Snake from "../classes/Snake";
 import styles from "./die.module.css";
 
 type DieProps = {
   disabled?: boolean;
   onRoll?: (dieNo: number) => void;
+  game: GameBoard;
 };
 
-function drawRandom() {
-  return Math.floor(Math.random() * GameBoard.DICE_FACES) + 1;
+function drawRandom(nos: Array<number>) {
+  return nos[Math.floor(Math.random() * nos.length)];
 }
 
-const Die = forwardRef<HTMLDivElement, DieProps>(({ disabled, onRoll }, ref) => {
-  const [animating, setAnimating] = useState(false);
+function shuffleArray(array: Array<number>) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  return array;
+}
+
+function runHeuristics(game: GameBoard) {
+  const nos: Array<number> = [];
+  const currentPlayer = game.getCurrentPlayer();
+
+  let nextSnake: Snake | null = null;
+  let nextLadder: Ladder | null = null;
+
+  for (let i = 1; i <= GameBoard.DICE_FACES; ++i) {
+    const pos = currentPlayer.position + i;
+
+    const element = game.elements[pos];
+
+    if (!nextSnake && element instanceof Snake) {
+      if (game.ctx.snakeBites > 2) {
+        nos.push(...new Array(3).fill(i));
+      } else {
+        nos.push(...new Array(12).fill(i));
+      }
+      nextSnake = element;
+    } else if (!nextLadder && element instanceof Ladder) {
+      nos.push(...new Array(18).fill(i));
+      nextLadder = element;
+    } else {
+      nos.push(...new Array(6).fill(i));
+    }
+  }
+
+  if (!nextLadder && !nextSnake && currentPlayer.position + GameBoard.DICE_FACES <= 100) {
+    nos.push(...new Array(6).fill(GameBoard.DICE_FACES));
+  }
+
+  return shuffleArray(nos);
+}
+
+const Die = forwardRef<HTMLDivElement, DieProps>(({ disabled, game, onRoll }, ref) => {
   const dieNoRef = useRef(5);
+  const [animating, setAnimating] = useState(false);
 
   useUpdateEffect(() => {
     let frameId: number;
@@ -24,6 +71,12 @@ const Die = forwardRef<HTMLDivElement, DieProps>(({ disabled, onRoll }, ref) => 
     let end: number = 0;
 
     if (animating) {
+      setTimeout(() => {
+        setAnimating(false);
+      }, 2000);
+
+      const nos = runHeuristics(game);
+
       const animate = (t: number) => {
         if (start < 0) {
           start = t;
@@ -31,7 +84,8 @@ const Die = forwardRef<HTMLDivElement, DieProps>(({ disabled, onRoll }, ref) => 
 
         frameId = requestAnimationFrame(animate);
         if (t - end >= 250 && t - start <= 1000) {
-          dieNoRef.current = drawRandom();
+          dieNoRef.current = drawRandom(nos);
+
           const sides = document.getElementsByClassName(styles.side);
 
           Array.from(sides).forEach((side) => {

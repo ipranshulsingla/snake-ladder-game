@@ -6,7 +6,7 @@ interface RewardModalProps {
   isOpen: boolean;
   isWinner: boolean;
   onClose: () => void;
-  couponURL: string;
+  couponURL?: string;
 }
 
 const RewardModal = ({ isOpen, isWinner, onClose, couponURL }: RewardModalProps) => {

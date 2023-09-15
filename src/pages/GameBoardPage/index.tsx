@@ -13,18 +13,28 @@ import noop from "../../utils/noop";
 import roundToLeastMultiple from "../../utils/roundToLeastMultiple";
 import styles from "./styles.module.css";
 
-import coupon1 from "../../assets/1.png";
-import coupon2 from "../../assets/2.png";
+import coupon1 from "../../assets/coupons/coupon1.webp";
+import coupon2 from "../../assets/coupons/coupon2.webp";
+import coupon3 from "../../assets/coupons/coupon3.webp";
+import coupon4 from "../../assets/coupons/coupon4.webp";
 import logo from "../../assets/logo.png";
 
 const coupons = [
   {
     id: "REWARD_101",
-    coupon: coupon1,
+    couponUrl: coupon1,
   },
   {
     id: "REWARD_102",
-    coupon: coupon2,
+    couponUrl: coupon2,
+  },
+  {
+    id: "REWARD_103",
+    couponUrl: coupon3,
+  },
+  {
+    id: "REWARD_104",
+    couponUrl: coupon4,
   },
 ];
 
@@ -71,7 +81,7 @@ function GameBoardPage() {
 
   const [dieDisabled, setBtnDisabled] = useState(false);
   const [modalVisible, setModalVisible] = useState(true);
-  const [coupon, setCoupon] = useState<(typeof coupons)[0] | null>(null);
+  const [coupon, setCoupon] = useState<(typeof coupons)[0] | null>(coupons[0]);
   const dieRef = useRef<HTMLDivElement>(null);
 
   const currentPlayer = game.getCurrentPlayer();
@@ -115,7 +125,7 @@ function GameBoardPage() {
 
   const handleCollectReward = async () => {
     try {
-      await document.exitFullscreen().catch(noop);
+      await document.exitFullscreen?.().catch(noop);
       const url = generateGoogleFormLink(realPlayer.name, String(coupon!.id));
       window.location.href = url;
     } catch (error) {
@@ -132,7 +142,7 @@ function GameBoardPage() {
         style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
         className={classNames(modalVisible && styles.hideBoard)}
       >
-        <Canvas style={{ width: boardSize, height: boardSize }} className={styles.canvas} draw={draw} />
+        <Canvas width={boardSize} height={boardSize} className={styles.canvas} draw={draw} />
         <div className={styles.controls} style={{ width: boardSize }}>
           <div className={styles.playersContainer}>
             {game.players.map((it, i) => {
@@ -152,14 +162,14 @@ function GameBoardPage() {
             })}
           </div>
         </div>
-        <Die ref={dieRef} disabled={dieDisabled} onRoll={handleRollDie} />
+        <Die ref={dieRef} disabled={dieDisabled} onRoll={handleRollDie} game={game} />
       </div>
       {modalVisible && <SnakeLadderModal onStartGame={handleStartGame} />}
       <RewardModal
         isWinner={game.winner === realPlayer}
         isOpen={game.gameOver}
         onClose={handleCollectReward}
-        couponURL={coupon?.coupon || ""}
+        couponURL={coupon?.couponUrl}
       />
     </div>
   );

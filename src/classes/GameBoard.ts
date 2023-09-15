@@ -60,6 +60,8 @@ class GameBoard {
   gameOver: boolean = false;
   winner: Player | null = null;
 
+  ctx = { snakeBites: 0 };
+
   constructor(players: Player[], config: GameBoardConfig = {}) {
     const { elements = defaultConfig.elements } = config;
 
@@ -139,6 +141,8 @@ class GameBoard {
     };
 
     if (this.hasSnake(targetPos)) {
+      this.ctx.snakeBites = +1;
+
       const snake = this.elements[targetPos];
 
       const { x: snakeStartX, y: snakeStartY } = getMarkerCoordsByPos(snake.startPos, this.cellSize);
