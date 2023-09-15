@@ -31,30 +31,25 @@ function runHeuristics(game: GameBoard) {
   const nos: Array<number> = [];
   const currentPlayer = game.getCurrentPlayer();
 
-  let nextSnake: Snake | null = null;
-  let nextLadder: Ladder | null = null;
-
   for (let i = 1; i <= GameBoard.DICE_FACES; ++i) {
     const pos = currentPlayer.position + i;
 
     const element = game.elements[pos];
 
-    if (!nextSnake && element instanceof Snake) {
+    if (element instanceof Snake) {
       if (game.ctx.snakeBites > 2) {
-        nos.push(...new Array(3).fill(i));
+        nos.push(...new Array(1).fill(i));
       } else {
-        nos.push(...new Array(12).fill(i));
+        nos.push(...new Array(3).fill(i));
       }
-      nextSnake = element;
-    } else if (!nextLadder && element instanceof Ladder) {
-      nos.push(...new Array(18).fill(i));
-      nextLadder = element;
+    } else if (element instanceof Ladder) {
+      nos.push(...new Array(24).fill(i));
     } else {
       nos.push(...new Array(6).fill(i));
     }
   }
 
-  if (!nextLadder && !nextSnake && currentPlayer.position + GameBoard.DICE_FACES <= 100) {
+  if (currentPlayer.position + GameBoard.DICE_FACES <= 100) {
     nos.push(...new Array(6).fill(GameBoard.DICE_FACES));
   }
 
