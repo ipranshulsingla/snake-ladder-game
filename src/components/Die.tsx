@@ -66,10 +66,6 @@ const Die = forwardRef<HTMLDivElement, DieProps>(({ disabled, game, onRoll }, re
     let end: number = 0;
 
     if (animating) {
-      setTimeout(() => {
-        setAnimating(false);
-      }, 2000);
-
       const nos = runHeuristics(game);
 
       const animate = (t: number) => {
