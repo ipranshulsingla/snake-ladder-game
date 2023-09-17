@@ -1,5 +1,5 @@
-function roundToLeastMultiple(val: number, multipleOf: number) {
-  return Math.floor(val / 10) * 10;
+function roundToLeastMultiple(val: number, multipleOf: number = 10) {
+  return Math.floor(val / multipleOf) * multipleOf;
 }
 
 export default roundToLeastMultiple;
