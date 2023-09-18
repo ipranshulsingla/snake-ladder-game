@@ -38,16 +38,18 @@ const coupons = [
   },
 ];
 
-const generateGoogleFormLink = (name: string, couponId: string) => {
+const generateGoogleFormLink = (name: string, couponId: string, isWinner: boolean) => {
   const nameKey = "entry.1261676882";
   const couponIdKey = "entry.1739122908";
+  const gameResultKey = "entry.238967404";
 
   const urlObj = new URL(
-    "https://docs.google.com/forms/d/e/1FAIpQLSd3XqJnHuxdCFgZcmKOiL1ct6uU3nMDEAzz41guvgv-fFzFxA/viewform?usp=pp_url&entry.1261676882=Name&entry.1739122908=ID"
+    "https://docs.google.com/forms/d/e/1FAIpQLSd3XqJnHuxdCFgZcmKOiL1ct6uU3nMDEAzz41guvgv-fFzFxA/viewform?usp=pp_url&entry.1261676882=Name&entry.1739122908=ID&entry.238967404=Result"
   );
 
   urlObj.searchParams.set(nameKey, name);
   urlObj.searchParams.set(couponIdKey, couponId);
+  urlObj.searchParams.set(gameResultKey, isWinner ? "Won" : "Lost");
 
   return urlObj.toString();
 };
@@ -126,7 +128,7 @@ function GameBoardPage() {
   const handleCollectReward = async () => {
     try {
       await document.exitFullscreen?.().catch(noop);
-      const url = generateGoogleFormLink(realPlayer.name, String(coupon!.id));
+      const url = generateGoogleFormLink(realPlayer.name, coupon!.id, game.winner === realPlayer);
       window.location.href = url;
     } catch (error) {
       alert("Something went wrong!");
@@ -142,7 +144,12 @@ function GameBoardPage() {
         style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
         className={classNames(modalVisible && styles.hideBoard)}
       >
-        <Canvas width={boardSize} height={boardSize} className={styles.canvas} draw={draw} />
+        <Canvas
+          width={boardSize}
+          height={boardSize}
+          className={styles.canvas}
+          draw={game.gameOver ? undefined : draw}
+        />
         <div className={styles.controls} style={{ width: boardSize }}>
           <div className={styles.playersContainer}>
             {game.players.map((it, i) => {

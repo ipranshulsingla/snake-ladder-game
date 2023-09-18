@@ -24,7 +24,7 @@
 
 .side {
   opacity: 0;
-  transition: opacity 100ms linear;
+  transition: opacity 60ms linear;
 }
 
 .activeSide {

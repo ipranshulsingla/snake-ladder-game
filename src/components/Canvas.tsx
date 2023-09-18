@@ -24,7 +24,7 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
     );
 
     useEffect(() => {
-      if (!canvasRef.current) return;
+      if (!canvasRef.current || !draw) return;
 
       const ctx = canvasRef.current.getContext("2d");
 
